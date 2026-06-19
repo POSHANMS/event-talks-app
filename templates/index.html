@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Stay up to date with the latest Google Cloud BigQuery releases and feature updates. Read, filter, and share updates on X/Twitter.">
+    <title>BigQuery Release Pulse</title>
+    <!-- Google Fonts: Inter & Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons for premium visual icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body class="dark-theme">
+    <div class="app-container">
+        <!-- Premium Header -->
+        <header class="app-header">
+            <div class="logo-container">
+                <div class="logo-icon-wrapper">
+                    <!-- Custom styled BigQuery SVG logo with gradient -->
+                    <svg class="logo-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z" fill="url(#logo-grad)"/>
+                        <defs>
+                            <linearGradient id="logo-grad" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#4285F4" />
+                                <stop offset="0.5" stop-color="#34A853" />
+                                <stop offset="1" stop-color="#FBBC05" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <div class="logo-text">
+                    <h1 class="gradient-text">BigQuery Release Pulse</h1>
+                    <p class="tagline">Real-time developer updates & release streams</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <div class="last-updated-badge" id="last-updated-badge">
+                    <span class="status-indicator online"></span>
+                    <span id="last-updated-text">Updating...</span>
+                </div>
+                <button id="refresh-btn" class="btn btn-primary" title="Refresh Release Notes">
+                    <i data-lucide="refresh-cw" class="icon-spin-disabled" id="refresh-icon"></i>
+                    <span>Refresh</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Search and Filters Panel -->
+        <section class="control-panel" aria-label="Filters and Search">
+            <div class="search-wrapper">
+                <i data-lucide="search" class="search-icon"></i>
+                <input type="text" id="search-input" placeholder="Search features, issues, deprecations..." autocomplete="off">
+            </div>
+            
+            <div class="filter-wrapper">
+                <div class="category-filters" id="category-filters-container">
+                    <button class="filter-chip active" data-category="all">All Updates</button>
+                    <button class="filter-chip" data-category="feature">Features</button>
+                    <button class="filter-chip" data-category="changed">Changes</button>
+                    <button class="filter-chip" data-category="deprecated">Deprecations</button>
+                    <button class="filter-chip" data-category="known issue">Known Issues</button>
+                    <button class="filter-chip" data-category="announcement">Announcements</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Feed Timeline -->
+        <main class="feed-section">
+            <div class="timeline-line"></div>
+            <div id="releases-feed" class="releases-feed">
+                <!-- Skeleton Loader State (shown initially) -->
+                <div class="skeleton-loader">
+                    <div class="skeleton-card">
+                        <div class="skeleton-line title"></div>
+                        <div class="skeleton-line text"></div>
+                        <div class="skeleton-line text short"></div>
+                    </div>
+                    <div class="skeleton-card">
+                        <div class="skeleton-line title"></div>
+                        <div class="skeleton-line text"></div>
+                        <div class="skeleton-line text"></div>
+                        <div class="skeleton-line text short"></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Premium Footer -->
+        <footer class="app-footer">
+            <p>BigQuery Release Pulse • Built using Flask, HTML5, Vanilla JS & CSS</p>
+            <p class="gcp-disclaimer">Not affiliated with Google LLC. Feed parsed from official Google Cloud release streams.</p>
+        </footer>
+    </div>
+
+    <!-- Premium Tweet Preview Composer Modal -->
+    <div id="tweet-modal" class="modal-overlay hidden" aria-hidden="true" role="dialog">
+        <div class="modal-card glassmorphic">
+            <div class="modal-header">
+                <div class="modal-title-group">
+                    <i data-lucide="twitter" class="twitter-blue-icon"></i>
+                    <h2>Compose Update Tweet</h2>
+                </div>
+                <button class="close-btn" id="close-modal-btn" aria-label="Close modal">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Mock Twitter Card -->
+                <div class="mock-tweet-card">
+                    <div class="tweet-header">
+                        <div class="mock-avatar">BQ</div>
+                        <div class="tweet-author-info">
+                            <span class="author-name">BigQuery Release Pulse</span>
+                            <span class="author-handle">@GCPReleasePulse</span>
+                        </div>
+                    </div>
+                    <div class="tweet-content-wrapper">
+                        <textarea id="tweet-textarea" rows="5" maxlength="280" placeholder="What's happening?"></textarea>
+                    </div>
+                </div>
+                <div class="composer-meta">
+                    <span class="character-disclaimer">Includes source URL automatically.</span>
+                    <div class="char-counter-wrapper">
+                        <svg class="progress-ring" width="30" height="30">
+                            <circle class="progress-ring-bg" stroke="#2f3336" stroke-width="2" fill="transparent" r="10" cx="15" cy="15"/>
+                            <circle class="progress-ring-indicator" id="char-progress-ring" stroke="#1d9bf0" stroke-width="2" fill="transparent" r="10" cx="15" cy="15"/>
+                        </svg>
+                        <span id="char-counter" class="char-counter">280</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancel-tweet-btn">Cancel</button>
+                <button class="btn btn-twitter" id="submit-tweet-btn">
+                    <i data-lucide="send"></i>
+                    <span>Share on X / Twitter</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JS Logic -->
+    <script src="/static/app.js"></script>
+</body>
+</html>
